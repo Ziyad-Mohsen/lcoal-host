@@ -2,7 +2,6 @@ import { readdir, stat } from "node:fs/promises";
 import type { Request, Response } from "express";
 import { STORAGE_ROOT } from "../../config/server.ts";
 import path from "node:path";
-import { readFile } from "node:fs/promises";
 
 type FileStats = {
   name: string;
