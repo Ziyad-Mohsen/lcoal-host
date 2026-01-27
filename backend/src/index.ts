@@ -3,14 +3,19 @@ import express, {
   type Request,
   type Response,
 } from "express";
+import cors from "cors";
+import filesRouter from "./modules/files/files.routes.ts";
 
 const app: Application = express();
 const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 
 app.use(express.json());
+app.use(cors());
 
-app.get("/api", (_req: Request, res: Response) => {
-  res.send("sladkjf");
+app.use("/api/v1/files", filesRouter);
+
+app.get("/api/v1", (_req: Request, res: Response) => {
+  res.json({ message: "hello world" });
 });
 
 app.listen(port, () => {
