@@ -1,14 +1,8 @@
 import { readdir, stat } from "node:fs/promises";
 import type { Request, Response } from "express";
-import { STORAGE_ROOT } from "../../config/server.ts";
 import path from "node:path";
-
-type FileStats = {
-  name: string;
-  size: number;
-  isFile: boolean;
-  createdAt: Date;
-};
+import { STORAGE_ROOT } from "../../config/server.ts";
+import type { FileStats } from "../../../types/index.ts";
 
 export const getAllFiles = async (req: Request, res: Response) => {
   try {
