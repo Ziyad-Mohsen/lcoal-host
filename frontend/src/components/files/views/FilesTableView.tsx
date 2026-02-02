@@ -9,6 +9,7 @@ import {
   TableBody,
   TableCell,
 } from "@/components/ui/table";
+import { bytesToGb } from "@/lib/utils";
 
 export default function FilesTableView({ files }: { files: FileStats[] }) {
   const path = useLocation().pathname;
@@ -41,7 +42,7 @@ export default function FilesTableView({ files }: { files: FileStats[] }) {
                   <Link to={file.name}>{file.name}</Link>
                 )}
               </TableCell>
-              <TableCell>{file.size}</TableCell>
+              <TableCell>{bytesToGb(file.size)} GB</TableCell>
               <TableCell>{file.createdAt.toString()}</TableCell>
             </TableRow>
           ))

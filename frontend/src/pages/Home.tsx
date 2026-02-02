@@ -54,10 +54,10 @@ export default function Home() {
             <BreadcrumbList>
               <BreadcrumbItem>
                 {path === "/" ? (
-                  <BreadcrumbPage>Root</BreadcrumbPage>
+                  <BreadcrumbPage>./</BreadcrumbPage>
                 ) : (
                   <>
-                    <BreadcrumbLink href="/">Root</BreadcrumbLink>
+                    <BreadcrumbLink href="/">./</BreadcrumbLink>
                     <BreadcrumbSeparator />
                   </>
                 )}
