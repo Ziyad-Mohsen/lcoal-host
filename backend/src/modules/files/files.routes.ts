@@ -1,9 +1,10 @@
 import express from "express";
-import { downloadFile, getAllFiles } from "./files.controller.ts";
+import { downloadFile, getStorageSize, listFiles } from "./files.controller.ts";
 
 const router = express.Router();
 
-router.get("/", getAllFiles);
+router.get("/", listFiles);
 router.get("/download", downloadFile);
+router.get("/storage", getStorageSize);
 
 export default router;
