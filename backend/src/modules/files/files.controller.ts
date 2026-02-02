@@ -2,7 +2,7 @@ import { readdir, stat } from "node:fs/promises";
 import type { Request, Response } from "express";
 import path from "node:path";
 import { MAX_TOTAL_SIZE, STORAGE_ROOT } from "../../config/server.ts";
-import type { FileStats } from "../../../types/index.ts";
+import type { FileStats, StorageInfo } from "../../../types/index.ts";
 import getFolderSize from "get-folder-size";
 
 export const listFiles = async (req: Request, res: Response) => {
@@ -79,11 +79,13 @@ export const getStorageSize = async (_req: Request, res: Response) => {
   try {
     const size = await getFolderSize.strict(STORAGE_ROOT);
 
-    return res.status(200).json({
+    const storageInfo: StorageInfo = {
       maxSize: MAX_TOTAL_SIZE,
       size,
       percentage: (size / MAX_TOTAL_SIZE) * 100,
-    });
+    };
+
+    return res.status(200).json(storageInfo);
   } catch (error) {
     console.error("Failed to calculate storage size:", error);
 

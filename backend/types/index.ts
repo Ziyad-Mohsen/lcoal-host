@@ -5,3 +5,9 @@ export type FileStats = {
   isFile: boolean;
   createdAt: Date;
 };
+
+export type StorageInfo = {
+  maxSize: number;
+  size: number;
+  percentage: number;
+};
