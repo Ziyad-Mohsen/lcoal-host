@@ -4,6 +4,7 @@ import path from "node:path";
 import { MAX_TOTAL_SIZE, STORAGE_ROOT } from "../../config/server.ts";
 import type { FileStats, StorageInfo } from "../../../types/index.ts";
 import getFolderSize from "get-folder-size";
+import mime from "mime-types";
 
 export const listFiles = async (req: Request, res: Response) => {
   try {
@@ -23,14 +24,16 @@ export const listFiles = async (req: Request, res: Response) => {
       fileNames.map(async (name) => {
         const filePath = path.join(fullPath, name);
         const stats = await stat(filePath);
-        const extension = name.split(".").at(-1);
+        const extension = stats.isFile() ? name.split(".").at(-1) : null;
+        const mimeType = mime.lookup(extension || "") || null;
 
         return {
           name,
           size: stats.size,
-          extension: stats.isFile() ? extension : null,
+          extension,
+          mimeType,
           isFile: stats.isFile(),
-          createdAt: stats.birthtime,
+          createdAt: stats.birthtime.toString(),
         };
       })
     );
@@ -48,7 +51,7 @@ export const listFiles = async (req: Request, res: Response) => {
       files: sortedFiles,
     });
   } catch (error) {
-    // TODO: use error middleware
+    // TODO: better error response
     console.error(error);
     res.status(500).json({ message: "internal server error" });
   }

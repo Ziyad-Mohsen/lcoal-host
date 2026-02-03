@@ -10,10 +10,7 @@ export default function App() {
         <div className="flex items-center">
           <AppSidebar />
           <Routes>
-            <Route path="/*" element={<Home />} />
-
-            {/* TODO: Create custom not found page */}
-            <Route path="*" element={<div>Not found</div>} />
+            <Route path="*" element={<Home />} />
           </Routes>
         </div>
       </SidebarProvider>

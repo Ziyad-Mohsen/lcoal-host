@@ -17,6 +17,7 @@
     "@eslint/js": "^9.39.2",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
+    "@types/mime-types": "^3.0.1",
     "@types/node": "^25.0.10",
     "@typescript-eslint/eslint-plugin": "^8.53.1",
     "@typescript-eslint/parser": "^8.53.1",
@@ -34,6 +35,7 @@
     "cors": "^2.8.6",
     "eslint-plugin-prettier": "^5.5.5",
     "express": "^5.2.1",
-    "get-folder-size": "^5.0.0"
+    "get-folder-size": "^5.0.0",
+    "mime-types": "^3.0.2"
   }
 }

@@ -10,8 +10,13 @@ interface FolderCardProps {
 export default function FolderCard({ folder }: FolderCardProps) {
   return (
     <Card>
-      <Link to={folder.name}>
-        <Folder />
+      <Link
+        className="w-full h-full flex flex-col items-center justify-center gap-2"
+        to={folder.name}
+      >
+        <div className="w-fit p-5 bg-primary text-primary-foreground rounded-lg">
+          <Folder strokeWidth={1.5} />
+        </div>
         {folder.name}
       </Link>
     </Card>

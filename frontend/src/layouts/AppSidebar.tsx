@@ -14,7 +14,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { Spinner } from "@/components/ui/spinner";
-import { bytesToGb } from "@/lib/utils";
+import { formatFileSize } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { RotateCcw } from "lucide-react";
 
@@ -98,8 +98,8 @@ export function AppSidebar() {
               value={storageUsage?.percentage}
             />
             <span className="flex items-center justify-between text-sm text-bold text-muted-foreground">
-              {bytesToGb(storageUsage?.size || 0)} GB of{" "}
-              {bytesToGb(storageUsage?.maxSize || 0, 0)} GB
+              {formatFileSize(storageUsage?.size || 0, 2, "GB")} of{" "}
+              {formatFileSize(storageUsage?.maxSize || 0, 0, "GB")}
             </span>
           </div>
         )}

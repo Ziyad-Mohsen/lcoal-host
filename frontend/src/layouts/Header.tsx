@@ -5,7 +5,7 @@ import { Upload } from "lucide-react";
 
 export default function Header() {
   return (
-    <div className="relative flex items-center justify-between p-3 border-b shadow-md z-20 bg-background">
+    <div className="sticky top-0 left-0 flex items-center justify-between p-3 border-b shadow-md z-20 bg-background">
       <SidebarTrigger />
       <div className="flex items-center gap-2">
         <Button>

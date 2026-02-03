@@ -2,52 +2,104 @@ import { Link, useLocation } from "react-router-dom";
 import type { FileStats } from "../../../../../backend/types";
 import {
   Table,
-  TableCaption,
   TableHeader,
   TableRow,
   TableHead,
   TableBody,
   TableCell,
 } from "@/components/ui/table";
-import { bytesToGb } from "@/lib/utils";
+import { formatFileSize, formatRelativeDate } from "@/lib/utils";
+import { getFileConfig } from "@/lib/fileTypeConfig";
+import { Download, Folder } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { apiBaseUrl } from "@/lib/axios";
+import FileDropDownMenu from "../FileDropDownMenu";
 
 export default function FilesTableView({ files }: { files: FileStats[] }) {
   const path = useLocation().pathname;
   return (
     <Table className="rounded-lg overflow-hidden">
-      <TableCaption>Files</TableCaption>
-      <TableHeader className="bg-primary">
+      <TableHeader className="bg-secondary text-secondary-foreground">
         <TableRow>
           <TableHead className="flex-1">Name</TableHead>
           <TableHead>Size</TableHead>
           <TableHead>Created_at</TableHead>
+          <TableHead></TableHead>
           {/* <TableHead className="text-right">Amount</TableHead> */}
         </TableRow>
       </TableHeader>
       <TableBody>
         {path != "/" && (
           <TableRow>
-            <TableCell colSpan={3}>
-              <Link to="..">../</Link>
+            <TableCell colSpan={4} className="py-0">
+              <Link
+                to=".."
+                relative="path"
+                className="block w-full h-full py-4"
+              >
+                ../
+              </Link>
             </TableCell>
           </TableRow>
         )}
         {files && files.length ? (
-          files.map((file, i) => (
-            <TableRow key={i}>
-              <TableCell className="font-medium">
-                {file.isFile ? (
-                  file.name
-                ) : (
-                  <Link to={file.name}>{file.name}</Link>
+          files.map((file, i) => {
+            const fileConfig = getFileConfig({
+              extension: file.extension,
+              mimeType: file.mimeType,
+            });
+            const Icon = fileConfig.icon;
+            return (
+              <TableRow key={i}>
+                <TableCell
+                  colSpan={file.isFile ? 1 : 4}
+                  className="font-medium py-0"
+                >
+                  {file.isFile ? (
+                    <div className="flex gap-2 items-end py-4">
+                      <Icon
+                        strokeWidth={1}
+                        style={{ color: fileConfig.color }}
+                      />
+                      <span>{file.name}</span>
+                    </div>
+                  ) : (
+                    <Link
+                      to={file.name}
+                      className="flex gap-2 items-end w-full h-full py-4"
+                    >
+                      <Folder strokeWidth={1} />
+                      <span>{file.name}</span>
+                    </Link>
+                  )}
+                </TableCell>
+                {file.isFile && (
+                  <>
+                    <TableCell>{formatFileSize(file.size)}</TableCell>
+                    <TableCell>
+                      {formatRelativeDate(Date.parse(file.createdAt))}
+                    </TableCell>
+                    <TableCell align="right" className="space-x-2">
+                      <Button size="icon-sm" variant="outline" asChild>
+                        <Link
+                          to={`${apiBaseUrl}/files/download?path=${path}/${file.name}`}
+                        >
+                          <Download />
+                        </Link>
+                      </Button>
+                      <FileDropDownMenu />
+                    </TableCell>
+                  </>
                 )}
-              </TableCell>
-              <TableCell>{bytesToGb(file.size)} GB</TableCell>
-              <TableCell>{file.createdAt.toString()}</TableCell>
-            </TableRow>
-          ))
+              </TableRow>
+            );
+          })
         ) : (
-          <TableRow>no files</TableRow>
+          <TableRow>
+            <TableCell colSpan={3} className="text-center">
+              No files
+            </TableCell>
+          </TableRow>
         )}
       </TableBody>
     </Table>

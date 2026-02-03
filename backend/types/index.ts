@@ -2,8 +2,9 @@ export type FileStats = {
   name: string;
   size: number;
   extension?: string | null;
+  mimeType?: string | null;
   isFile: boolean;
-  createdAt: Date;
+  createdAt: string;
 };
 
 export type StorageInfo = {
