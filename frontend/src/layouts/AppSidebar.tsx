@@ -16,7 +16,7 @@ import {
 import { Spinner } from "@/components/ui/spinner";
 import { formatFileSize } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
-import { RotateCcw } from "lucide-react";
+import { Folder, RotateCcw } from "lucide-react";
 
 const progressColors = {
   low: "green",
@@ -63,6 +63,7 @@ export function AppSidebar() {
           <SidebarMenu>
             <SidebarMenuItem className="flex items-center gap-2">
               <SidebarMenuButton className="cursor-pointer bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground min-w-8 duration-200 ease-linear">
+                <Folder />
                 <span>All files</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
