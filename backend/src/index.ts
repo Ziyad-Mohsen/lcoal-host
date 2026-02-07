@@ -6,6 +6,7 @@ import express, {
 } from "express";
 import cors from "cors";
 import filesRouter from "./modules/files/files.routes.ts";
+import foldersRouter from "./modules/folders/folder.routes.ts";
 
 const app: Application = express();
 
@@ -13,6 +14,7 @@ app.use(express.json());
 app.use(cors());
 
 app.use("/api/v1/files", filesRouter);
+app.use("/api/v1/folder", foldersRouter);
 
 app.get("/api/v1", (_req: Request, res: Response) => {
   res.json({ message: "hello world" });

@@ -1,3 +1,4 @@
+import { CreateFolderDialog } from "@/components/dialogs/CreateFolderDialog";
 import { ThemeToggle } from "@/components/themeToggle";
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
@@ -8,6 +9,7 @@ export default function Header() {
     <div className="sticky top-0 left-0 flex items-center justify-between p-3 border-b shadow-md z-20 bg-background">
       <SidebarTrigger />
       <div className="flex items-center gap-2">
+        <CreateFolderDialog />
         <Button>
           Upload <Upload />
         </Button>

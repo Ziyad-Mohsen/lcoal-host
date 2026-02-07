@@ -1,3 +1,12 @@
+// TODO: use standardized api response
+export type ApiResponse<T, E> = {
+  success: boolean;
+  status: number;
+  message: string;
+  data: T | null;
+  errors: E[] | null;
+};
+
 export type FileStats = {
   name: string;
   size: number;
