@@ -1,10 +1,14 @@
 import { CreateFolderRequestBody } from "../folders/folder.validations.ts";
 import { mkdir, stat } from "node:fs/promises";
-import type { Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import path from "node:path";
 import { STORAGE_ROOT } from "../../config/server.ts";
 
-export const createFolder = async (req: Request, res: Response) => {
+export const createFolder = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { success, error, data } = CreateFolderRequestBody.safeParse(
       req.body
@@ -29,18 +33,6 @@ export const createFolder = async (req: Request, res: Response) => {
     await mkdir(fullPath);
     return res.json({ message: "Folder created successfully" });
   } catch (error) {
-    console.error("Failed to create folder", error);
-
-    if (error instanceof Error && "code" in error && error.code === "ENOENT") {
-      res.status(404).json({ message: `Invalid path` });
-    }
-
-    if (error instanceof Error && "code" in error && error.code === "EEXIST") {
-      res.status(409).json({ message: `Folder already exists` });
-    }
-
-    return res.status(500).json({
-      message: "Failed to create folder",
-    });
+    next(error);
   }
 };

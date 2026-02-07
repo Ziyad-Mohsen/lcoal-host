@@ -7,6 +7,7 @@ import express, {
 import cors from "cors";
 import filesRouter from "./modules/files/files.routes.ts";
 import foldersRouter from "./modules/folders/folder.routes.ts";
+import { errorHandler } from "./middlewares/index.ts";
 
 const app: Application = express();
 
@@ -19,6 +20,8 @@ app.use("/api/v1/folder", foldersRouter);
 app.get("/api/v1", (_req: Request, res: Response) => {
   res.json({ message: "hello world" });
 });
+
+app.use(errorHandler);
 
 const getLocalIpAddress = () => {
   const networkInterfaces = os.networkInterfaces();

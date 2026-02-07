@@ -1,16 +1,16 @@
 import { AxiosError, type AxiosResponse } from "axios";
 import { axiosInstance } from "../lib/axios";
 import {
+  type ApiResponse,
   type FileStats,
   type StorageInfo,
 } from "@/../../backend/types/index.ts";
 
-export async function getAllFiles(path?: string): Promise<FileStats[]> {
+export async function getAllFiles(path?: string): Promise<FileStats[] | null> {
   try {
-    const res: AxiosResponse<{ files: FileStats[] }> = await axiosInstance.get(
-      `/files?path=${path}`,
-    );
-    return res.data.files;
+    const res: AxiosResponse<ApiResponse<FileStats[]>> =
+      await axiosInstance.get(`/files?path=${path}`);
+    return res.data.data;
   } catch (error) {
     if (error instanceof AxiosError) {
       throw error;
@@ -22,9 +22,9 @@ export async function getAllFiles(path?: string): Promise<FileStats[]> {
 
 export async function getStorageInfo() {
   try {
-    const res: AxiosResponse<StorageInfo> =
+    const res: AxiosResponse<ApiResponse<StorageInfo>> =
       await axiosInstance.get("/files/storage");
-    return res.data;
+    return res.data.data;
   } catch (error) {
     console.error(error);
   }

@@ -1,5 +1,4 @@
-// TODO: use standardized api response
-export type ApiResponse<T, E> = {
+export type ApiResponse<T = null, E = null> = {
   success: boolean;
   status: number;
   message: string;
