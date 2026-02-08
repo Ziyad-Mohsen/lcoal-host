@@ -62,16 +62,18 @@ export default function Home() {
         <div className="flex items-center justify-between">
           <Breadcrumb>
             <BreadcrumbList>
-              <BreadcrumbItem>
-                {pathname === "/" ? (
+              {pathname === "/" ? (
+                <BreadcrumbItem>
                   <BreadcrumbPage>./</BreadcrumbPage>
-                ) : (
-                  <>
+                </BreadcrumbItem>
+              ) : (
+                <>
+                  <BreadcrumbItem>
                     <BreadcrumbLink href="/">./</BreadcrumbLink>
-                    <BreadcrumbSeparator />
-                  </>
-                )}
-              </BreadcrumbItem>
+                  </BreadcrumbItem>
+                  <BreadcrumbSeparator />
+                </>
+              )}
 
               {pathArr.map((route, i) => {
                 const href = "/" + pathArr.slice(0, i + 1).join("/");

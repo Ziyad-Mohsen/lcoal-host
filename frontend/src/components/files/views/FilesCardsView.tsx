@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import type { FileStats } from "../../../../../backend/types";
 import FileCard from "../FileCard";
-import FolderCard from "../FolderCard";
+import FolderCard from "../../folders/FolderCard";
 import { Card } from "@/components/ui/card";
 import { ArrowLeft } from "lucide-react";
 
@@ -21,7 +21,11 @@ export default function FilesCardsView({ files }: { files: FileStats[] }) {
         </Card>
       )}
       {files.map((file) =>
-        file.isFile ? <FileCard file={file} /> : <FolderCard folder={file} />,
+        file.isFile ? (
+          <FileCard key={path + file.name} file={file} />
+        ) : (
+          <FolderCard key={path + file.name} folder={file} />
+        ),
       )}
     </div>
   );
