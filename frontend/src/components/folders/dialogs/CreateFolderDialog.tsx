@@ -19,36 +19,35 @@ import {
 } from "@/components/ui/input-group";
 import { Field, FieldError } from "@/components/ui/field";
 import { createFolder } from "@/api/folders.api";
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Spinner } from "@/components/ui/spinner";
+import { toast } from "sonner";
 
 export function CreateFolderDialog() {
   const pathname = useLocation().pathname;
   const formRef = useRef<HTMLFormElement | null>(null);
   const [open, setOpen] = useState<boolean>(false);
   const [folderName, setFolderName] = useState<string>("");
-  const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const queryClient = useQueryClient();
+
+  const createMutation = useMutation({
+    mutationFn: createFolder,
+    onSuccess: () => {
+      setOpen(false);
+      toast.success(`Created "${folderName}" folder`);
+      queryClient.invalidateQueries({
+        predicate: (query) =>
+          ["files", "storageInfo"].includes(query.queryKey[0] as string),
+      });
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
 
   const handleFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    if (!folderName) {
-      setError("Must provide folder name");
-      return;
-    }
-
-    setIsLoading(true);
-    const data = await createFolder({ path: pathname, folderName });
-    setIsLoading(false);
-
-    if (!data?.success) {
-      setError(data?.message);
-    } else {
-      queryClient.invalidateQueries({ queryKey: ["files"] });
-      setError(null);
-      setOpen(false);
-    }
+    createMutation.mutate({ path: pathname, folderName });
   };
 
   return (
@@ -57,8 +56,7 @@ export function CreateFolderDialog() {
       onOpenChange={(open) => {
         setFolderName("");
         setOpen(open);
-        setError(null);
-        setIsLoading(false);
+        createMutation.reset();
       }}
     >
       <div>
@@ -102,10 +100,10 @@ export function CreateFolderDialog() {
                   )}
                 </InputGroupAddon>
               </InputGroup>
-              {error && (
+              {createMutation.error && (
                 <FieldError className="flex items-center gap-1">
                   <Info size={18} />
-                  {error}
+                  {createMutation.error.message}
                 </FieldError>
               )}
             </Field>
@@ -115,13 +113,19 @@ export function CreateFolderDialog() {
               <Button variant="outline">Cancel</Button>
             </DialogClose>
             <Button
-              disabled={isLoading}
+              disabled={createMutation.isPending}
               type="submit"
               onClick={() => {
                 formRef.current?.requestSubmit();
               }}
             >
-              {isLoading ? "Creating..." : "Create"}
+              {createMutation.isPending ? (
+                <>
+                  Creating <Spinner />
+                </>
+              ) : (
+                "Create"
+              )}
             </Button>
           </DialogFooter>
         </DialogContent>

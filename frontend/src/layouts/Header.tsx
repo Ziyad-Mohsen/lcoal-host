@@ -1,4 +1,4 @@
-import { CreateFolderDialog } from "@/components/dialogs/CreateFolderDialog";
+import { CreateFolderDialog } from "@/components/folders/dialogs/CreateFolderDialog";
 import { ThemeToggle } from "@/components/themeToggle";
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";

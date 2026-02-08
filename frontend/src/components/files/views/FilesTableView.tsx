@@ -14,6 +14,8 @@ import { Download, Folder } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { apiBaseUrl } from "@/lib/axios";
 import FileDropDownMenu from "../FileDropDownMenu";
+import FolderDropDownMenu from "@/components/folders/FolderDropDownMenu";
+import type { MouseEvent } from "react";
 
 export default function FilesTableView({ files }: { files: FileStats[] }) {
   const path = useLocation().pathname;
@@ -70,6 +72,14 @@ export default function FilesTableView({ files }: { files: FileStats[] }) {
                     >
                       <Folder strokeWidth={1} />
                       <span>{file.name}</span>
+                      <div
+                        className="ml-auto"
+                        onClick={(e: MouseEvent<HTMLDivElement>) => {
+                          e.stopPropagation();
+                        }}
+                      >
+                        <FolderDropDownMenu folder={file} />
+                      </div>
                     </Link>
                   )}
                 </TableCell>

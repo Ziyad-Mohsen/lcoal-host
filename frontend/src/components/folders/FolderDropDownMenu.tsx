@@ -1,8 +1,6 @@
 import {
-  Download,
   EllipsisVertical,
   FolderOpen,
-  Info,
   Link,
   Link2,
   Share2,
@@ -20,6 +18,10 @@ import {
   DropdownMenuSubTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import type { FileStats } from "../../../../backend/types";
+import DeleteFolderDialog from "./dialogs/DeleteFolderDialog";
 
 type Option = {
   text: string;
@@ -29,26 +31,33 @@ type Option = {
   fn?: () => void;
 };
 
-const options: Option[] = [
-  { text: "Open", icon: FolderOpen },
-  { text: "Download", icon: Download },
-  {
-    text: "Share",
-    icon: Share2,
-    subMenu: [{ text: "Copy link", icon: Link2 }],
-  },
-  {
-    text: "Info",
-    icon: Info,
-  },
-  {
-    text: "Delete",
-    icon: Trash,
-    variant: "destructive",
-  },
-];
+export default function FolderDropDownMenu({ folder }: { folder: FileStats }) {
+  const navigate = useNavigate();
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
 
-export default function FileDropDownMenu() {
+  const options: Option[] = [
+    {
+      text: "Open",
+      icon: FolderOpen,
+      fn: () => {
+        navigate(folder.name);
+      },
+    },
+    {
+      text: "Share",
+      icon: Share2,
+      subMenu: [{ text: "Copy link", icon: Link2 }],
+    },
+    {
+      text: "Delete",
+      icon: Trash,
+      variant: "destructive",
+      fn: () => {
+        setDeleteDialogOpen(true);
+      },
+    },
+  ];
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -93,6 +102,13 @@ export default function FileDropDownMenu() {
           })}
         </DropdownMenuGroup>
       </DropdownMenuContent>
+
+      {/* Dialogs */}
+      <DeleteFolderDialog
+        open={deleteDialogOpen}
+        setIsOpen={(open) => setDeleteDialogOpen(open)}
+        folder={folder}
+      />
     </DropdownMenu>
   );
 }
