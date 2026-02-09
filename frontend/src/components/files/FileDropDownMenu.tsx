@@ -70,6 +70,7 @@ export default function FileDropDownMenu() {
                   <DropdownMenuSubContent>
                     {option.subMenu.map((subOption) => (
                       <DropdownMenuItem
+                        key={option.text + subOption.text}
                         variant={subOption.variant || "default"}
                         onClick={subOption.fn}
                       >
