@@ -4,26 +4,28 @@ import { getFileConfig } from "@/lib/fileTypeConfig";
 import { formatFileSize, formatRelativeDate } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { Download } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { apiBaseUrl } from "@/lib/axios";
 import FileDropDownMenu from "./FileDropDownMenu";
+import { usePath } from "@/hooks/usePath";
 
 interface FileCardProps {
   file: FileStats;
 }
 
 export default function FileCard({ file }: FileCardProps) {
-  const path = useLocation().pathname;
+  const path = usePath();
   const fileConfig = getFileConfig({
     extension: file.extension,
     mimeType: file.mimeType,
   });
   const Icon = fileConfig.icon;
+  const filePath = path.join(file.name);
   return (
     <Card className="relative items-center p-5">
       <div className="absolute top-2 right-2 flex items-center gap-2">
         <Button size="icon-sm" variant="outline" asChild>
-          <Link to={`${apiBaseUrl}/files/download?path=${path}/${file.name}`}>
+          <Link to={`${apiBaseUrl}/files/download?path=${filePath}`}>
             <Download />
           </Link>
         </Button>

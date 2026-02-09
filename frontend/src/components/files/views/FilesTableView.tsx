@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import type { FileStats } from "../../../../../backend/types";
 import {
   Table,
@@ -16,9 +16,10 @@ import { apiBaseUrl } from "@/lib/axios";
 import FileDropDownMenu from "../FileDropDownMenu";
 import FolderDropDownMenu from "@/components/folders/FolderDropDownMenu";
 import type { MouseEvent } from "react";
+import { usePath } from "@/hooks/usePath";
 
 export default function FilesTableView({ files }: { files: FileStats[] }) {
-  const path = useLocation().pathname;
+  const path = usePath();
   return (
     <Table className="rounded-lg overflow-hidden">
       <TableHeader className="bg-secondary text-secondary-foreground">
@@ -31,7 +32,7 @@ export default function FilesTableView({ files }: { files: FileStats[] }) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {path != "/" && (
+        {!path.isRoot && (
           <TableRow>
             <TableCell colSpan={4} className="py-0">
               <Link

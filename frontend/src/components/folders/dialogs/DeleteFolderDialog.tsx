@@ -12,10 +12,10 @@ import { Trash2Icon } from "lucide-react";
 import type { FileStats } from "../../../../../backend/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteFolder } from "@/api/folders.api";
-import { useLocation } from "react-router-dom";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
+import { usePath } from "@/hooks/usePath";
 
 export default function DeleteFolderDialog({
   open = false,
@@ -27,7 +27,7 @@ export default function DeleteFolderDialog({
   folder: FileStats;
 }) {
   const queryClient = useQueryClient();
-  const pathname = useLocation().pathname;
+  const path = usePath();
   const deleteMutation = useMutation({
     mutationFn: deleteFolder,
     onSuccess: (data) => {
@@ -44,8 +44,9 @@ export default function DeleteFolderDialog({
   });
 
   const handleDelete = () => {
-    const folderPath = `${pathname}${pathname === "/" ? "" : "/"}${folder.name}`; // TODO: use joinPath util function or hook
-    deleteMutation.mutate(folderPath);
+    const folderPath = path.join(folder.name);
+    // TODO: use joinPath util function or hook
+    deleteMutation.mutate(folderPath as string);
   };
 
   return (

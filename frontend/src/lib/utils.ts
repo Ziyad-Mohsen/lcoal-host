@@ -37,3 +37,7 @@ export function formatFileSize(
 
 export const formatRelativeDate = (timeStamp: number) =>
   DateTime.fromMillis(timeStamp).toRelative();
+
+export const joinPath = (segments: string[], relative: boolean = false) => {
+  return (relative ? "" : "/") + segments.join("/");
+};

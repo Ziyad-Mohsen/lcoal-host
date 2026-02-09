@@ -10,7 +10,6 @@ import {
   DialogHeader,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { useLocation } from "react-router-dom";
 import { useRef, useState, type ChangeEvent, type FormEvent } from "react";
 import {
   InputGroup,
@@ -22,9 +21,11 @@ import { createFolder } from "@/api/folders.api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Spinner } from "@/components/ui/spinner";
 import { toast } from "sonner";
+import { usePath } from "@/hooks/usePath";
+import { joinPath } from "@/lib/utils";
 
 export function CreateFolderDialog() {
-  const pathname = useLocation().pathname;
+  const path = usePath();
   const formRef = useRef<HTMLFormElement | null>(null);
   const [open, setOpen] = useState<boolean>(false);
   const [folderName, setFolderName] = useState<string>("");
@@ -47,7 +48,7 @@ export function CreateFolderDialog() {
 
   const handleFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    createMutation.mutate({ path: pathname, folderName });
+    createMutation.mutate({ path: path.pathname, folderName });
   };
 
   return (
@@ -71,8 +72,7 @@ export function CreateFolderDialog() {
             <DialogDescription>
               New folder will be created in:{" "}
               <span className="py-1 px-2 bg-secondary rounded-lg">
-                {pathname}
-                {folderName && `/${folderName}`}
+                {joinPath([path.root, path.join(folderName)])}
               </span>
             </DialogDescription>
           </DialogHeader>
