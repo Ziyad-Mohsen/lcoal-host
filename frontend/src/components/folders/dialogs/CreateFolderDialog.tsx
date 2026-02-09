@@ -72,7 +72,7 @@ export function CreateFolderDialog() {
             <DialogDescription>
               New folder will be created in:{" "}
               <span className="py-1 px-2 bg-secondary rounded-lg">
-                {joinPath([path.root, path.join(folderName)])}
+                {joinPath([path.root, ...path.segments, folderName])}
               </span>
             </DialogDescription>
           </DialogHeader>
