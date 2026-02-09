@@ -1,10 +1,12 @@
 import { AxiosError, type AxiosResponse } from "axios";
-import { axiosInstance } from "../lib/axios";
+import { apiBaseUrl, axiosInstance } from "../lib/axios";
 import {
   type ApiResponse,
   type FileStats,
   type StorageInfo,
 } from "@/../../backend/types/index.ts";
+
+export const fileDownloadUrl = `${apiBaseUrl}/files/download?path=`;
 
 export async function getAllFiles(path?: string): Promise<FileStats[] | null> {
   try {
@@ -18,6 +20,10 @@ export async function getAllFiles(path?: string): Promise<FileStats[] | null> {
     console.error(error);
     throw new Error("Failed to fetch files");
   }
+}
+
+export function downloadFile(filePath: string) {
+  window.location.href = fileDownloadUrl + filePath;
 }
 
 export async function deleteFile(filePath: string) {

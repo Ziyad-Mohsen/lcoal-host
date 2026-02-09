@@ -22,6 +22,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { FileStats } from "../../../../backend/types";
 import DeleteFolderDialog from "./dialogs/DeleteFolderDialog";
+import { copyToClipboard } from "@/lib/utils";
+import { toast } from "sonner";
 
 type Option = {
   text: string;
@@ -35,6 +37,16 @@ export default function FolderDropDownMenu({ folder }: { folder: FileStats }) {
   const navigate = useNavigate();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
 
+  const copyLink = async () => {
+    try {
+      await copyToClipboard(window.location.href + "/" + folder.name);
+      toast("Link copied!");
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to copy link");
+    }
+  };
+
   const options: Option[] = [
     {
       text: "Open",
@@ -46,7 +58,7 @@ export default function FolderDropDownMenu({ folder }: { folder: FileStats }) {
     {
       text: "Share",
       icon: Share2,
-      subMenu: [{ text: "Copy link", icon: Link2 }],
+      subMenu: [{ text: "Copy link", icon: Link2, fn: copyLink }],
     },
     {
       text: "Delete",

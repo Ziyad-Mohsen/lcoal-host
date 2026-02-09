@@ -23,6 +23,11 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import DeleteFileDialog from "./dialogs/DeleteFileDialog";
 import type { FileStats } from "../../../../backend/types";
+import { useStoragePath } from "@/hooks/useStoragePath";
+import { downloadFile, fileDownloadUrl } from "@/api/files.api";
+import { toast } from "sonner";
+import { copyToClipboard } from "@/lib/utils";
+import FileInfoDialog from "./dialogs/FileInfoDialog";
 
 type Option = {
   text: string;
@@ -34,18 +39,39 @@ type Option = {
 
 export default function FileDropDownMenu({ file }: { file: FileStats }) {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
+  const [infoDialogOpen, setInfoDialogOpen] = useState<boolean>(false);
+  const path = useStoragePath();
+
+  const copyLink = async () => {
+    try {
+      await copyToClipboard(fileDownloadUrl + path.join(file.name));
+      toast("Link copied!");
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to copy link");
+    }
+  };
 
   const options: Option[] = [
     { text: "Open", icon: FolderOpen },
-    { text: "Download", icon: Download },
+    {
+      text: "Download",
+      icon: Download,
+      fn: () => downloadFile(path.join(file.name)),
+    },
     {
       text: "Share",
       icon: Share2,
-      subMenu: [{ text: "Copy link", icon: Link2 }],
+      subMenu: [
+        { text: "copy download link", icon: Link2, fn: () => copyLink() },
+      ],
     },
     {
       text: "Info",
       icon: Info,
+      fn: () => {
+        setInfoDialogOpen(true);
+      },
     },
     {
       text: "Delete",
@@ -105,6 +131,11 @@ export default function FileDropDownMenu({ file }: { file: FileStats }) {
       <DeleteFileDialog
         open={deleteDialogOpen}
         setIsOpen={(open) => setDeleteDialogOpen(open)}
+        file={file}
+      />
+      <FileInfoDialog
+        open={infoDialogOpen}
+        setIsOpen={(open) => setInfoDialogOpen(open)}
         file={file}
       />
     </DropdownMenu>

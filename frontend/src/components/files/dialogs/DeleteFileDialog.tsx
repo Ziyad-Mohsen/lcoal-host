@@ -9,23 +9,19 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Trash2Icon } from "lucide-react";
-import type { FileStats } from "../../../../../backend/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { useStoragePath } from "@/hooks/useStoragePath";
 import { deleteFile } from "@/api/files.api";
+import type { FileDialogProps } from "./types";
 
 export default function DeleteFileDialog({
   open = false,
   setIsOpen,
   file,
-}: {
-  open: boolean;
-  setIsOpen: (open: boolean) => void;
-  file: FileStats;
-}) {
+}: FileDialogProps) {
   const queryClient = useQueryClient();
   const path = useStoragePath();
   const deleteMutation = useMutation({

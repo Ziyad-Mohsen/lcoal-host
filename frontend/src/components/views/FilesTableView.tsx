@@ -52,6 +52,7 @@ export default function FilesTableView({ files }: { files: FileStats[] }) {
               mimeType: file.mimeType,
             });
             const Icon = fileConfig.icon;
+            const filePath = path.join(file.name);
             return (
               <TableRow key={i}>
                 <TableCell
@@ -93,12 +94,12 @@ export default function FilesTableView({ files }: { files: FileStats[] }) {
                     <TableCell align="right" className="space-x-2">
                       <Button size="icon-sm" variant="outline" asChild>
                         <Link
-                          to={`${apiBaseUrl}/files/download?path=${path}/${file.name}`}
+                          to={`${apiBaseUrl}/files/download?path=${filePath}`}
                         >
                           <Download />
                         </Link>
                       </Button>
-                      <FileDropDownMenu />
+                      <FileDropDownMenu file={file} />
                     </TableCell>
                   </>
                 )}

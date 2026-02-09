@@ -41,3 +41,24 @@ export const formatRelativeDate = (timeStamp: number) =>
 export const joinPath = (segments: string[], relative: boolean = false) => {
   return (relative ? "" : "/") + segments.join("/");
 };
+
+export const copyToClipboard = async (text: string) => {
+  if (navigator.clipboard && window.isSecureContext) {
+    // Modern approach
+    await navigator.clipboard.writeText(text);
+  } else {
+    // Fallback approach for insecure contexts
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    // Ensure textarea is not visible or disruptive
+    textArea.style.position = "fixed";
+    textArea.style.left = "-999999px";
+    textArea.style.top = "-999999px";
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    document.execCommand("copy");
+
+    document.body.removeChild(textArea);
+  }
+};
