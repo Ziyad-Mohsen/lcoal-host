@@ -16,10 +16,10 @@ import { apiBaseUrl } from "@/lib/axios";
 import FileDropDownMenu from "../FileDropDownMenu";
 import FolderDropDownMenu from "@/components/folders/FolderDropDownMenu";
 import type { MouseEvent } from "react";
-import { usePath } from "@/hooks/usePath";
+import { useStoragePath } from "@/hooks/useStoragePath";
 
 export default function FilesTableView({ files }: { files: FileStats[] }) {
-  const path = usePath();
+  const path = useStoragePath();
   return (
     <Table className="rounded-lg overflow-hidden">
       <TableHeader className="bg-secondary text-secondary-foreground">

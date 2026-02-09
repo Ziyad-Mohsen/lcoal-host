@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { useQuery } from "@tanstack/react-query";
 import { Spinner } from "@/components/ui/spinner";
-import { usePath } from "@/hooks/usePath";
+import { useStoragePath } from "@/hooks/useStoragePath";
 import { joinPath } from "@/lib/utils";
 
 type View = "tables" | "cards";
@@ -34,7 +34,7 @@ export default function Storage() {
     (sessionStorage.getItem("filesView") as View) || "tables",
   );
 
-  const path = usePath("/");
+  const path = useStoragePath("/");
 
   const {
     data: files,

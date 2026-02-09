@@ -4,10 +4,10 @@ import FileCard from "../FileCard";
 import FolderCard from "../../folders/FolderCard";
 import { Card } from "@/components/ui/card";
 import { ArrowLeft } from "lucide-react";
-import { usePath } from "@/hooks/usePath";
+import { useStoragePath } from "@/hooks/useStoragePath";
 
 export default function FilesCardsView({ files }: { files: FileStats[] }) {
-  const path = usePath();
+  const path = useStoragePath();
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
       {!path?.isRoot && (

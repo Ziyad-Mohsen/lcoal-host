@@ -21,11 +21,11 @@ import { createFolder } from "@/api/folders.api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Spinner } from "@/components/ui/spinner";
 import { toast } from "sonner";
-import { usePath } from "@/hooks/usePath";
+import { useStoragePath } from "@/hooks/useStoragePath";
 import { joinPath } from "@/lib/utils";
 
 export function CreateFolderDialog() {
-  const path = usePath();
+  const path = useStoragePath();
   const formRef = useRef<HTMLFormElement | null>(null);
   const [open, setOpen] = useState<boolean>(false);
   const [folderName, setFolderName] = useState<string>("");

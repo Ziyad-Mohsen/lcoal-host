@@ -15,7 +15,7 @@ import { deleteFolder } from "@/api/folders.api";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-import { usePath } from "@/hooks/usePath";
+import { useStoragePath } from "@/hooks/useStoragePath";
 
 export default function DeleteFolderDialog({
   open = false,
@@ -27,7 +27,7 @@ export default function DeleteFolderDialog({
   folder: FileStats;
 }) {
   const queryClient = useQueryClient();
-  const path = usePath();
+  const path = useStoragePath();
   const deleteMutation = useMutation({
     mutationFn: deleteFolder,
     onSuccess: (data) => {

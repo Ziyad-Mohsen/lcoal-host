@@ -6,7 +6,7 @@ function isValidPathname(pathname: string) {
   return pathnameRegex.test(pathname);
 }
 
-type HookReturn = {
+type StoragePath = {
   pathname: string;
   segments: string[];
   root: string;
@@ -15,7 +15,7 @@ type HookReturn = {
   shift: (shiftsCount: number) => string;
 };
 
-export function usePath(path?: string): HookReturn {
+export function useStoragePath(path?: string): StoragePath {
   const pathname = useLocation().pathname;
   const decodedPath = decodeURIComponent(path || pathname);
   const pathArr = pathname.split("/").filter(Boolean);

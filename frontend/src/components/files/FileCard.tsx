@@ -7,14 +7,14 @@ import { Download } from "lucide-react";
 import { Link } from "react-router-dom";
 import { apiBaseUrl } from "@/lib/axios";
 import FileDropDownMenu from "./FileDropDownMenu";
-import { usePath } from "@/hooks/usePath";
+import { useStoragePath } from "@/hooks/useStoragePath";
 
 interface FileCardProps {
   file: FileStats;
 }
 
 export default function FileCard({ file }: FileCardProps) {
-  const path = usePath();
+  const path = useStoragePath();
   const fileConfig = getFileConfig({
     extension: file.extension,
     mimeType: file.mimeType,
