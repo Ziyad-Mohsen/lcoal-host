@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import type { FileStats } from "../../../../../backend/types";
-import FileCard from "../FileCard";
-import FolderCard from "../../folders/FolderCard";
+import type { FileStats } from "../../../../backend/types";
+import FileCard from "../files/FileCard";
+import FolderCard from "../folders/FolderCard";
 import { Card } from "@/components/ui/card";
 import { ArrowLeft } from "lucide-react";
 import { useStoragePath } from "@/hooks/useStoragePath";

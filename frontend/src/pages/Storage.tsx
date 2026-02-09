@@ -2,8 +2,8 @@ import { getAllFiles } from "@/api/files.api";
 import { useEffect, useState, type ReactNode } from "react";
 import type { FileStats } from "@/../../backend/types/index.ts";
 import Header from "@/layouts/Header";
-import FilesTableView from "@/components/files/views/FilesTableView";
-import FilesCardsView from "@/components/files/views/FilesCardsView";
+import FilesTableView from "@/components/views/FilesTableView";
+import FilesCardsView from "@/components/views/FilesCardsView";
 import { FolderX, LayoutGrid, TableProperties } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 import {

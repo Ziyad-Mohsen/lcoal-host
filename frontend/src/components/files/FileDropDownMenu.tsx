@@ -20,6 +20,9 @@ import {
   DropdownMenuSubTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import DeleteFileDialog from "./dialogs/DeleteFileDialog";
+import type { FileStats } from "../../../../backend/types";
 
 type Option = {
   text: string;
@@ -29,26 +32,30 @@ type Option = {
   fn?: () => void;
 };
 
-const options: Option[] = [
-  { text: "Open", icon: FolderOpen },
-  { text: "Download", icon: Download },
-  {
-    text: "Share",
-    icon: Share2,
-    subMenu: [{ text: "Copy link", icon: Link2 }],
-  },
-  {
-    text: "Info",
-    icon: Info,
-  },
-  {
-    text: "Delete",
-    icon: Trash,
-    variant: "destructive",
-  },
-];
+export default function FileDropDownMenu({ file }: { file: FileStats }) {
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
 
-export default function FileDropDownMenu() {
+  const options: Option[] = [
+    { text: "Open", icon: FolderOpen },
+    { text: "Download", icon: Download },
+    {
+      text: "Share",
+      icon: Share2,
+      subMenu: [{ text: "Copy link", icon: Link2 }],
+    },
+    {
+      text: "Info",
+      icon: Info,
+    },
+    {
+      text: "Delete",
+      icon: Trash,
+      variant: "destructive",
+      fn: () => {
+        setDeleteDialogOpen(true);
+      },
+    },
+  ];
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -94,6 +101,12 @@ export default function FileDropDownMenu() {
           })}
         </DropdownMenuGroup>
       </DropdownMenuContent>
+      {/* Dialogs */}
+      <DeleteFileDialog
+        open={deleteDialogOpen}
+        setIsOpen={(open) => setDeleteDialogOpen(open)}
+        file={file}
+      />
     </DropdownMenu>
   );
 }

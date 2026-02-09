@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import type { FileStats } from "../../../../../backend/types";
+import type { FileStats } from "../../../../backend/types";
 import {
   Table,
   TableHeader,
@@ -13,7 +13,7 @@ import { getFileConfig } from "@/lib/fileTypeConfig";
 import { Download, Folder } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { apiBaseUrl } from "@/lib/axios";
-import FileDropDownMenu from "../FileDropDownMenu";
+import FileDropDownMenu from "../files/FileDropDownMenu";
 import FolderDropDownMenu from "@/components/folders/FolderDropDownMenu";
 import type { MouseEvent } from "react";
 import { useStoragePath } from "@/hooks/useStoragePath";

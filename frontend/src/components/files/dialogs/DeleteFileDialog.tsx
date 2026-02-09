@@ -11,25 +11,25 @@ import {
 import { Trash2Icon } from "lucide-react";
 import type { FileStats } from "../../../../../backend/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteFolder } from "@/api/folders.api";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { useStoragePath } from "@/hooks/useStoragePath";
+import { deleteFile } from "@/api/files.api";
 
-export default function DeleteFolderDialog({
+export default function DeleteFileDialog({
   open = false,
   setIsOpen,
-  folder,
+  file,
 }: {
   open: boolean;
   setIsOpen: (open: boolean) => void;
-  folder: FileStats;
+  file: FileStats;
 }) {
   const queryClient = useQueryClient();
   const path = useStoragePath();
   const deleteMutation = useMutation({
-    mutationFn: deleteFolder,
+    mutationFn: deleteFile,
     onSuccess: (data) => {
       setIsOpen(false);
       toast(data.message);
@@ -44,8 +44,8 @@ export default function DeleteFolderDialog({
   });
 
   const handleDelete = () => {
-    const folderPath = path.join(folder.name);
-    deleteMutation.mutate(folderPath as string);
+    const filePath = decodeURIComponent(path.join(file.name));
+    deleteMutation.mutate(filePath as string);
   };
 
   return (
@@ -55,11 +55,11 @@ export default function DeleteFolderDialog({
           <AlertDialogMedia className="bg-destructive/10 text-destructive dark:bg-destructive/20 dark:text-destructive">
             <Trash2Icon />
           </AlertDialogMedia>
-          <AlertDialogTitle>Delete Folder?</AlertDialogTitle>
+          <AlertDialogTitle>Delete File?</AlertDialogTitle>
           <AlertDialogDescription>
             This will <span className="text-destructive">permanently</span>{" "}
-            delete the folder and all its contents. This action cannot be
-            undone. Make sure you no longer need these files.
+            delete this file. This action cannot be undone. Make sure you no
+            longer need these file.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

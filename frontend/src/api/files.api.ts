@@ -20,6 +20,21 @@ export async function getAllFiles(path?: string): Promise<FileStats[] | null> {
   }
 }
 
+export async function deleteFile(filePath: string) {
+  try {
+    const res: AxiosResponse<ApiResponse> = await axiosInstance.delete(
+      `/files/delete`,
+      { params: { path: filePath } },
+    );
+    return res.data;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      throw error.response?.data;
+    }
+    throw { message: "Something went wrong, Try again later" };
+  }
+}
+
 export async function getStorageInfo() {
   try {
     const res: AxiosResponse<ApiResponse<StorageInfo>> =

@@ -29,7 +29,7 @@ export default function FileCard({ file }: FileCardProps) {
             <Download />
           </Link>
         </Button>
-        <FileDropDownMenu />
+        <FileDropDownMenu file={file} />
       </div>
       <div
         className="w-fit p-5 rounded-lg"
