@@ -174,3 +174,39 @@ export const getStorageSize = async (
     next(error);
   }
 };
+
+export const uploadFile = (
+  req: Request,
+  res: Response<ApiResponse<{ path: string; size: number }>>,
+  next: NextFunction
+) => {
+  try {
+    const file = (req as Request & { file?: { path: string; size: number } })
+      .file;
+
+    if (!file) {
+      return res.status(400).json({
+        success: false,
+        status: 400,
+        message: "No file uploaded",
+        data: null,
+        errors: null,
+      });
+    }
+
+    const relativePath = path.join("/", path.relative(STORAGE_ROOT, file.path));
+
+    return res.status(201).json({
+      success: true,
+      status: 201,
+      message: "File uploaded successfully",
+      data: {
+        path: relativePath,
+        size: file.size,
+      },
+      errors: null,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
