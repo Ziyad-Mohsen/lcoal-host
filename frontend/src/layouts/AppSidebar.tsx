@@ -95,7 +95,8 @@ export function AppSidebar() {
               </div>
             </div>
             <Progress
-              className={`h-1.5 [&>div]:bg-${progressColor}-500`}
+              className="h-1.5"
+              color={progressColor}
               value={storageUsage?.percentage}
             />
             <span className="flex items-center justify-between text-sm text-bold text-muted-foreground">
