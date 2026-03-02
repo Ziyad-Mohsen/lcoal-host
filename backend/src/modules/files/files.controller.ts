@@ -9,6 +9,77 @@ import type {
 } from "../../../types/index.ts";
 import getFolderSize from "get-folder-size";
 import mime from "mime-types";
+import { readdirSync, statSync } from "node:fs";
+
+type FilesCount = {
+  total: number;
+  videos: number;
+  images: number;
+  text: number;
+  others: number;
+};
+
+export const filesCount = async (
+  _req: Request,
+  res: Response<ApiResponse<FilesCount>>,
+  next: NextFunction
+) => {
+  try {
+    const recursiveCount = (dir: string) => {
+      const result = {
+        total: 0,
+        videos: 0,
+        images: 0,
+        text: 0,
+        others: 0,
+      };
+
+      const entries = readdirSync(dir);
+
+      for (const entry of entries) {
+        const entryPath = path.join(dir, entry);
+
+        const stats = statSync(entryPath);
+
+        if (stats.isDirectory()) {
+          const nestedResult = recursiveCount(entryPath);
+          for (const key of Object.keys(result) as (keyof FilesCount)[]) {
+            result[key] += nestedResult[key];
+          }
+        } else if (stats.isFile()) {
+          const fileExt = path.extname(entry);
+          const mimeType = mime.lookup(fileExt);
+          switch (mimeType.toString().split("/")[0]) {
+            case "image":
+              result.images++;
+              break;
+            case "video":
+              result.videos++;
+              break;
+            case "text":
+              result.text++;
+              break;
+            default:
+              result.others++;
+          }
+          result.total++;
+        }
+      }
+
+      return result;
+    };
+    const filesCount = recursiveCount(STORAGE_ROOT);
+    return res.status(200).json({
+      success: true,
+      status: 200,
+      message: "Files count was calculated successfully",
+      data: filesCount,
+      errors: null,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const listFiles = async (
   req: Request,

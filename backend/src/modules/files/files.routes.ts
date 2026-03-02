@@ -5,6 +5,7 @@ import { access, mkdir } from "node:fs/promises";
 import {
   deleteFile,
   downloadFile,
+  filesCount,
   getStorageSize,
   listFiles,
   uploadFile,
@@ -104,6 +105,7 @@ const upload = multer({
   },
 });
 
+router.get("/count", filesCount);
 router.get("/", listFiles);
 router.get("/download", downloadFile);
 router.delete("/delete", deleteFile);
