@@ -15,6 +15,14 @@ export type FileStats = {
   createdAt: string;
 };
 
+export type FilesCount = {
+  total: number;
+  videos: number;
+  images: number;
+  text: number;
+  others: number;
+};
+
 export type StorageInfo = {
   maxSize: number;
   size: number;

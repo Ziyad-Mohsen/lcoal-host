@@ -4,20 +4,13 @@ import path from "node:path";
 import { MAX_TOTAL_SIZE, STORAGE_ROOT } from "../../config/server.ts";
 import type {
   ApiResponse,
+  FilesCount,
   FileStats,
   StorageInfo,
 } from "../../../types/index.ts";
 import getFolderSize from "get-folder-size";
 import mime from "mime-types";
 import { readdirSync, statSync } from "node:fs";
-
-type FilesCount = {
-  total: number;
-  videos: number;
-  images: number;
-  text: number;
-  others: number;
-};
 
 export const filesCount = async (
   _req: Request,
