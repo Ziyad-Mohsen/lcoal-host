@@ -4,18 +4,22 @@ import { SidebarProvider } from "./components/ui/sidebar";
 import { AppSidebar } from "./layouts/AppSidebar";
 import { ROUTES } from "./constants";
 import Home from "./pages/Home";
+import Header from "./layouts/Header";
 
 export default function App() {
   return (
     <>
-      <SidebarProvider className="flex flex-col">
-        <div className="flex items-center">
+      <SidebarProvider className="flex h-screen">
+        <div className="flex items-stretch w-full">
           <AppSidebar />
-          <Routes>
-            <Route path={ROUTES.ROOT} element={<Home />} />
-            <Route path={`${ROUTES.STORAGE}/*`} element={<Storage />} />
-            <Route path="*" element={<div>Not found</div>} />
-          </Routes>
+          <div className="flex-1 overflow-auto">
+            <Header />
+            <Routes>
+              <Route path={ROUTES.ROOT} element={<Home />} />
+              <Route path={`${ROUTES.STORAGE}/*`} element={<Storage />} />
+              <Route path="*" element={<div>Not found</div>} />
+            </Routes>
+          </div>
         </div>
       </SidebarProvider>
     </>

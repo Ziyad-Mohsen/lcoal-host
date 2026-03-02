@@ -13,7 +13,7 @@ import {
   type FileWithProgress,
 } from "@/contexts/UploadedFilesContext";
 import { ArrowRight, CloudUpload, Upload, X } from "lucide-react";
-import { useRef, useState, type ChangeEvent } from "react";
+import { useEffect, useRef, useState, type ChangeEvent } from "react";
 import UploadFileCard from "./UploadFileCard";
 import { useStoragePath } from "@/hooks/useStoragePath";
 import { generateId } from "@/lib/utils";
@@ -66,6 +66,13 @@ export default function UploadFilesDialog() {
       },
     });
   };
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("upload") === "1") {
+      setTimeout(() => setIsOpen(true), 0);
+    }
+  }, []);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>

@@ -59,9 +59,9 @@ export default function UploadFileCard({
           onClick={onRemove}
           size="icon-sm"
           variant="ghost"
-          className="hover:bg-destructive/20 hover:text-destructive rounded-full"
+          className="hover:bg-destructive dark:hover:bg-destructive hover:text-destructive-foreground dark:hover:text-destructive-foreground rounded-full"
         >
-          <X size={16} strokeWidth={1} />
+          <X size={16} />
         </Button>
       </DialogHeader>
       {!compact && (

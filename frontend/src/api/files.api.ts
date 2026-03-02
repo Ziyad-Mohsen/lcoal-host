@@ -8,6 +8,16 @@ import {
 
 export const fileDownloadUrl = `${apiBaseUrl}/files/download?path=`;
 
+export async function getFilesCount() {
+  try {
+    const res = await axiosInstance.get("/files/count");
+    return res.data.data;
+  } catch (error) {
+    console.error(error);
+    throw new Error("Failed to fetch files count");
+  }
+}
+
 export async function getAllFiles(path?: string): Promise<FileStats[] | null> {
   try {
     const res: AxiosResponse<ApiResponse<FileStats[]>> =

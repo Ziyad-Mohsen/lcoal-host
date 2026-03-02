@@ -181,4 +181,14 @@
   body {
     @apply bg-background text-foreground;
   }
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+  .scrollable-content-x {
+    @apply w-full flex items-center gap-2 overflow-auto py-2;
+  }
 }

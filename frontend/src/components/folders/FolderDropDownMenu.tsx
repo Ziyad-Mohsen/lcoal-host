@@ -1,7 +1,7 @@
 import {
+  Bookmark,
   EllipsisVertical,
   FolderOpen,
-  Link,
   Link2,
   Share2,
   Trash,
@@ -22,8 +22,11 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { FileStats } from "../../../../backend/types";
 import DeleteFolderDialog from "./dialogs/DeleteFolderDialog";
-import { copyToClipboard } from "@/lib/utils";
+import { copyToClipboard, joinPath } from "@/lib/utils";
 import { toast } from "sonner";
+import { useStoragePath } from "@/hooks/useStoragePath";
+import { useQuickAccess } from "@/contexts/QuickAccessContext";
+import { STORAGE_ROOT } from "@/constants";
 
 type Option = {
   text: string;
@@ -35,7 +38,9 @@ type Option = {
 
 export default function FolderDropDownMenu({ folder }: { folder: FileStats }) {
   const navigate = useNavigate();
+  const { segments } = useStoragePath();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
+  const { setQuickAccessFolders } = useQuickAccess();
 
   const copyLink = async () => {
     try {
@@ -53,6 +58,24 @@ export default function FolderDropDownMenu({ folder }: { folder: FileStats }) {
       icon: FolderOpen,
       fn: () => {
         navigate(folder.name);
+      },
+    },
+    {
+      text: "Quick access",
+      icon: Bookmark,
+      fn: () => {
+        const folderPath = joinPath([STORAGE_ROOT, ...segments, folder.name]);
+        return setQuickAccessFolders((prev) =>
+          prev.some((f) => f.path === folderPath)
+            ? prev
+            : [
+                {
+                  path: folderPath,
+                  name: folder.name,
+                },
+                ...prev,
+              ],
+        );
       },
     },
     {
@@ -84,7 +107,7 @@ export default function FolderDropDownMenu({ folder }: { folder: FileStats }) {
             return option.subMenu ? (
               <DropdownMenuSub key={key}>
                 <DropdownMenuSubTrigger>
-                  <Link />
+                  {option.icon && <option.icon />}
                   {option.text}
                 </DropdownMenuSubTrigger>
                 <DropdownMenuPortal>

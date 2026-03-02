@@ -8,6 +8,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import queryClient from "@/lib/queryClient.ts";
 import { Toaster } from "sonner";
 import UploadedFilesProvider from "./contexts/UploadedFilesContext.tsx";
+import QuickAccessProvider from "./contexts/QuickAccessContext.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -15,8 +16,10 @@ createRoot(document.getElementById("root")!).render(
       <QueryClientProvider client={queryClient}>
         <ThemeProvider>
           <UploadedFilesProvider>
-            <App />
-            <Toaster richColors />
+            <QuickAccessProvider>
+              <App />
+              <Toaster richColors />
+            </QuickAccessProvider>
           </UploadedFilesProvider>
         </ThemeProvider>
       </QueryClientProvider>

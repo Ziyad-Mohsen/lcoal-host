@@ -1,7 +1,6 @@
 import { getAllFiles } from "@/api/files.api";
 import { useEffect, useState, type ReactNode } from "react";
 import type { FileStats } from "@/../../backend/types/index.ts";
-import Header from "@/layouts/Header";
 import FilesTableView from "@/components/views/FilesTableView";
 import FilesCardsView from "@/components/views/FilesCardsView";
 import { FolderX, LayoutGrid, TableProperties } from "lucide-react";
@@ -56,8 +55,6 @@ export default function Storage() {
 
   return (
     <main className="w-full">
-      <Header />
-
       <div className="p-5 space-y-5">
         <div className="flex items-center justify-between">
           <Breadcrumb>

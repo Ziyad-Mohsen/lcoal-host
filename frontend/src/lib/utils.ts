@@ -1,6 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { DateTime } from "luxon";
+import { STORAGE_ROOT } from "@/constants";
 
 export type FileSizeUnit = "B" | "KB" | "MB" | "GB" | "TB";
 
@@ -66,4 +67,9 @@ export const copyToClipboard = async (text: string) => {
 
     document.body.removeChild(textArea);
   }
+};
+
+export const isStorageRoute = (pathname: string) => {
+  const pathArr = pathname.split("/").filter(Boolean);
+  return STORAGE_ROOT && pathArr[0] === STORAGE_ROOT;
 };
