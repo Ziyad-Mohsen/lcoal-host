@@ -44,7 +44,7 @@ export default function Notifications() {
           <Bell />
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="end" className="min-w-100">
+      <PopoverContent align="end" className="w-100 max-w-[90vw]">
         <PopoverHeader>
           <PopoverTitle>Notifications</PopoverTitle>
         </PopoverHeader>
