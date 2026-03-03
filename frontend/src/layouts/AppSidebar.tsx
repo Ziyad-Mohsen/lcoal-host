@@ -16,7 +16,21 @@ import {
 import { Spinner } from "@/components/ui/spinner";
 import { formatFileSize } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
-import { Folder, RotateCcw } from "lucide-react";
+import { Bookmark, Folder, Home, RotateCcw, X } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+import { ROUTES } from "@/constants";
+import { useQuickAccess } from "@/contexts/QuickAccessContext";
+
+type NavigationMenuItem = {
+  href: string;
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+  label: string;
+};
+
+const NavigationItems: NavigationMenuItem[] = [
+  { href: ROUTES.ROOT, icon: Home, label: "Home" },
+  { href: ROUTES.STORAGE, icon: Folder, label: "Storage" },
+];
 
 const progressColors = {
   low: "green",
@@ -42,6 +56,8 @@ const getProgressColor = (value: number): string => {
 };
 
 export function AppSidebar() {
+  const { quickAccessFolders, setQuickAccessFolders } = useQuickAccess();
+  const { pathname } = useLocation();
   const {
     data: storageUsage,
     isPending,
@@ -49,6 +65,9 @@ export function AppSidebar() {
     refetch,
   } = useQuery({ queryKey: ["storageInfo"], queryFn: getStorageUsage });
   const progressColor = getProgressColor(storageUsage?.percentage || 0);
+
+  const firstSegment = pathname.split("/")[1];
+  const activeRoute = firstSegment ? `/${firstSegment}` : ROUTES.ROOT;
 
   return (
     <Sidebar>
@@ -58,16 +77,81 @@ export function AppSidebar() {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent className="p-2">
-        <SidebarGroupLabel className="text-sm p-0">Storage</SidebarGroupLabel>
+        {/* Navigation Menu */}
         <SidebarGroupContent className="flex flex-col gap-2">
           <SidebarMenu>
-            <SidebarMenuItem className="flex items-center gap-2">
-              <SidebarMenuButton className="cursor-pointer bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground min-w-8 duration-200 ease-linear">
-                <Folder />
-                <span>All files</span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
+            {NavigationItems.map((item) => (
+              <SidebarMenuItem
+                key={item.href}
+                className="flex items-center gap-2"
+              >
+                <SidebarMenuButton
+                  asChild
+                  isActive={item.href === activeRoute}
+                  className="cursor-pointer"
+                >
+                  <Link to={item.href}>
+                    <item.icon />
+                    <span>{item.label}</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
           </SidebarMenu>
+        </SidebarGroupContent>
+
+        {/* Quick access */}
+        <SidebarGroupLabel className="mt-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+          <Bookmark className="h-3.5 w-3.5" />
+          <span>Quick access</span>
+        </SidebarGroupLabel>
+        <SidebarGroupContent className="flex flex-col flex-1 overflow-scroll no-scrollbar gap-1">
+          {quickAccessFolders.length === 0 ? (
+            <div className="px-2 py-2 text-xs text-muted-foreground">
+              No quick access folders yet.
+            </div>
+          ) : (
+            <SidebarMenu>
+              {quickAccessFolders.map((folder) => (
+                <SidebarMenuItem
+                  key={`${folder.path}-${folder.name}`}
+                  className="flex items-center gap-2"
+                >
+                  <SidebarMenuButton asChild className="h-fit">
+                    <Link to={folder.path} className="flex justify-between">
+                      <div className="flex items-center gap-2">
+                        <Folder className="h-4 w-4 text-primary" />
+                        <div className="flex flex-col items-start">
+                          <span className="truncate">{folder.name}</span>
+                          <span className="text-xs text-muted-foreground truncate">
+                            {folder.path}
+                          </span>
+                        </div>
+                      </div>
+                      <Button
+                        className="rounded-full w-6 h-6 hover:bg-destructive dark:hover:bg-destructive hover:text-destructive-foreground dark:hover:text-destructive-foreground"
+                        size="icon-sm"
+                        variant="ghost"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          e.preventDefault();
+                          setQuickAccessFolders((prevFolders) =>
+                            prevFolders.filter(
+                              (prevFolder) =>
+                                prevFolder.path + prevFolder.name !==
+                                folder.path + folder.name,
+                            ),
+                          );
+                        }}
+                      >
+                        <X size={8} />
+                      </Button>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          )}
         </SidebarGroupContent>
       </SidebarContent>
       <SidebarFooter className="mt-auto border-t p-3">
