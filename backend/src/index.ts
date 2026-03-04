@@ -1,4 +1,6 @@
 import os from "os";
+import path from "path";
+import { fileURLToPath } from "url";
 import express, {
   type Application,
   type Request,
@@ -21,8 +23,17 @@ app.get("/api/v1", (_req: Request, res: Response) => {
   res.json({ message: "hello world" });
 });
 
-app.use(errorHandler);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const frontendDistPath = path.join(__dirname, "../../frontend/dist");
 
+app.use(express.static(frontendDistPath));
+
+app.get(/.*/, (_req: Request, res: Response) => {
+  res.sendFile(path.join(frontendDistPath, "index.html"));
+});
+
+app.use(errorHandler);
 const getLocalIpAddress = () => {
   const networkInterfaces = os.networkInterfaces();
 
